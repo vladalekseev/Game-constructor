@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="libs/PointJS/point.js"></script>
+
+<!--<canvas id="canvas"></canvas>-->
+
+<button id="add">Add</button>
+
+<style>
+    #add {
+        float: right;
+        z-index: 100;
+    }
+
+</style>
+
+<script>
+
+                //D E F A U L T
+    var defaultWidth = 1300;
+    var defaultHeight = 800;
+
+    var pjs = new PointJS("2d", defaultWidth, defaultHeight);
+    //pjs.system.initFullPage();
+
+    var game = pjs.game;
+    var point= pjs.vector.point;
+
+    var key = pjs.keyControl;
+    key.initKeyControl();
+
+
+
+
+             //B A C K G R O U N D
+
+    var asphalt = game.newBackgroundObject({
+       file: "img/space.jpg",
+        countX: 4,
+        countY: 3,
+        x:0,
+        y:0,
+        w: 1300,
+        h: 800
+    });
+
+
+              // O B S T A C L E S
+
+    var rect = [];
+
+    var add = document.getElementById("add");
+    add.addEventListener("click", function() {
+
+        var randomX = Math.random()*defaultWidth;
+        var randomY = Math.random()*defaultHeight;
+        finish.fillColor = "white";
+        rect.push(game.newImageObject({
+            file: "img/rock1.png",
+            x: randomX,
+            y: randomY,
+            scale: 0.5,
+        }));
+    });
+
+
+        var mouse = {
+            x : 0,
+            y : 0,
+        }
+
+        var selected = false;
+
+
+
+                function isCursorHoverRect(rect) {
+                    return mouse.x > rect.x && mouse.x < (rect.x) + rect.w  &&
+                            mouse.y > rect.y && mouse.y < (rect.y) + rect.h;
+                }
+
+
+                window.onmousemove = function(e) {
+                    mouse.x = e.pageX;
+                    mouse.y = e.pageY;
+                }
+
+                window.onmousedown = function() {
+                    if(!selected) {
+                        var keys;
+
+                        for(keys in rect) {
+                            if(isCursorHoverRect(rect[keys])) {
+                                selected = rect[keys];
+                            }
+                        }
+                    }
+                }
+
+                window.onmouseup = function() {
+                    selected = false;
+                }
+
+
+
+
+             // O B J E C T S (C A R)
+
+    var finish = game.newImageObject({
+        file: "img/hole.jpg",
+        w: 100,
+        h: 100,
+        x: 1000,
+        y: 600
+    });
+
+
+    var car = game.newImageObject({
+       file: "img/ship.png",
+       scale: 0.1,
+        x: 50,
+        y: 10,
+
+       //angle: 90
+    });
+    car.setCenter(point(-10, 0));
+
+                var boom = game.newImageObject({
+                    file: "img/boom.png",
+                    scale: 0.2,
+                    x: 50,
+                    y: 10,
+
+                    //angle: 90
+                });
+                boom.setCenter(point(-10, 0));
+
+
+    var speed = 0;
+    var maxSpeed = 5;
+    var step = 0.02;
+
+
+
+
+
+
+                                            // G A M E  C Y C L E
+
+
+    game.newLoop("game", function() {
+        game.fill("#ccc");
+
+
+                // B G  C Y C L E
+
+        asphalt.draw();
+        finish.draw();
+
+
+                // C A R  C Y C L E
+
+      //pjs.camera.setPositionC(cart.getPosition(1));
+        car.draw();
+
+        if(car.x > 0 && car.x < defaultWidth-50 && car.y > 0 && car.y < defaultHeight-50)
+
+
+            if(key.isDown("UP")){
+
+                speed += speed < maxSpeed ? step : 0;
+                if(car.isArrIntersect(rect)) {
+                    speed = 0;
+                    boom.setPosition(car.getPosition());
+                    car = boom;
+
+                }
+                if(car.isIntersect(finish)) {
+                    finish.fillColor = "black";
+                    car.file = "";
+                }
+            }
+            else if(key.isDown("DOWN")){
+                speed -= speed > -maxSpeed/2 ? step : 0;
+            }
+            else {
+                if(speed != 0) {
+                    if(speed > 0)
+                        speed -= step*3;
+
+                    if(speed < 0)
+                        speed += step*3;
+                }
+            }
+
+            if(speed != 0) {
+                car.moveAngle(speed);
+                if(key.isDown("LEFT")){
+                    car.turn(-speed/2);
+                }
+                if(key.isDown("RIGHT")){
+                    car.turn(speed/2);
+                }
+            }
+
+
+
+
+                //O B S T A C L E S  C Y C L E
+
+        for(var keyss in rect) {
+            rect[keyss].draw();
+        }
+
+        if(selected) {
+            selected.x = mouse.x - selected.w/2;
+            selected.y = mouse.y - selected.h/2;
+        }
+
+
+
+    });
+
+
+
+
+
+
+    game.startLoop("game");
+
+
+
+
+</script>
+
+</body>
+</html>
