@@ -83,8 +83,8 @@ game.newLoopFromConstructor("myGame", function() {
        OOP.forArr(meteors, function(el, i) {
           el.draw();
 
-           //el.move(point(-meteorsSpeed*dt, 0));
-           el.moveTo( ship.getPosition(), 2 );
+           el.move(point(-meteorsSpeed*dt, 0));
+           //el.moveTo( ship.getPosition(), 2 );
            el.turn(-1);
 
            if(el.isIntersect(ship)) {

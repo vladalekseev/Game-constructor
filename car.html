@@ -171,7 +171,7 @@
         if(car.x > 0 && car.x < defaultWidth-50 && car.y > 0 && car.y < defaultHeight-50)
 
 
-            if(key.isDown("UP")){
+            if(key.isPress("UP")){
 
                 speed += speed < maxSpeed ? step : 0;
                 if(car.isArrIntersect(rect)) {
