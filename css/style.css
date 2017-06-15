@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #dde9ff;
+    background-color: #dedede;
     font-family: Verdana;
     font-size: 16px;
     color: #fff;
@@ -23,24 +23,76 @@ button {
     font-family: Verdana;
     font-size: 16px;
     color: #fff;
+    border-radius: 50px;
 }
 
 .actions {
     position: absolute;
-    top: 71px;
+    top: 0px;
     left: 1101px;
     width: 340px;
     cursor: pointer;
 }
+
+#cont {
+    position: absolute;
+    top: 520px;
+    left: 1101px;
+    width: 330px;
+    cursor: pointer;
+    border: 2px black solid;
+    border-radius: 15px;
+
+}
+
+#cont div {
+    margin: 30px;
+    color: black;
+}
+
+
+
+
 .actions li {
     padding: 20px;
     text-align: center;
-    background-color: #4b51b5;
-    border: 1px solid white;
-    color: #fff;
+    background: linear-gradient(to top, rgb(74, 74, 74), #656761);
+    border: 2px solid black;
+    color: white;
+    border-radius: 50px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    box-shadow: 1px 2px 2px 1px rgba(0,0,0,0.3);
+    letter-spacing: 2px;
+}
+
+.actions li:hover {
+    background: linear-gradient(to top, #0e0e0e, #63645d);
+}
+
+#finish {
+    margin-bottom: 30px;
+}
+
+#stopAct, #flagAct {
+    display: inline-block;
+    width: 80px;
+    background-color: #8e000d;
+
+}
+
+
+
+#stop, #flag {
+    display: inline-block;
+    width: 162px;
+
 }
 
 canvas {
     cursor: pointer;
-    border: 1px solid black;
+    border: 4px solid black;
+    border-radius: 50px;
+    box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.6);
+
 }

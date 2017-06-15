@@ -34,8 +34,16 @@ game.newLoopFromConstructor("myGame", function() {
         h: 200,
         w: 200,
         x: 0,
-        y: 0
+        y: 0,
 
+    });
+
+    var rect = game.newRectObject({
+        x: 30,
+        y: 50,
+        w: 1,
+        h: 1,
+        fillColor: "white"
     });
 
 
@@ -53,6 +61,8 @@ game.newLoopFromConstructor("myGame", function() {
     var grass = [];
 
 
+
+
     var add = document.getElementById("add");
     var mow = document.getElementById("mow");
     var water = document.getElementById("water");
@@ -66,10 +76,9 @@ game.newLoopFromConstructor("myGame", function() {
             y: ship.y,
             w: 100,
             h: 100,
+            alpha: 0
         }));
     });
-
-
 
 
 
@@ -82,15 +91,47 @@ game.newLoopFromConstructor("myGame", function() {
 
 
 
+
         OOP.forArr(grass, function(el, i) {
             el.draw();
+            el.transparent(0.010);
+
+
+            var dist = ship.getDistanceC(el.getPosition(1));
+
+
+            if(dist < 50) {
+                el.drawDynamicBox("white");
+                console.log(el.id);
+
+                mow.addEventListener("click", function() {
+                    el.setImage("img/grace.jpg");
+                });
+
+                water.addEventListener("click", function() {
+                    if(el.getImage() == "img/grace.jpg"){
+                        el.setImage("img/grace2.jpg");
+                    }
+                    else {
+                        el.setImage("img/grass3.jpg");
+                    }
+
+                });
+            }
+            else {
+                setTimeout(function() {
+                    el.setImage("img/grass2.jpg");
+                }, 1200);
+            }
+
+/*
 
             if(ship.isIntersect(el)) {
 
+
                 mow.addEventListener("click", function() {
 
-                    var slii = grass.slice(i,1);
-                    slii.setImage("img/grace.jpg");
+                    el.setImage("img/grace.jpg");
                 });
 
                 water.addEventListener("click", function() {
@@ -100,26 +141,38 @@ game.newLoopFromConstructor("myGame", function() {
 
                 });
                 //grass.splice(i, 1);
-                //el.setImage("img/grace.jpg");
             }
-/*            else {
+            else {
                     setTimeout(function() {
                         el.setImage("img/grass2.jpg");
                     }, 1000);
-            }*/
+            }
+*/
 
 
         });
 
 
-
+        rect.draw();
 
         ship.draw();
 
 
         if(mouse.isDown("RIGHT")) {
-            ship.moveTo(mouse.getPosition(), speed);
+            rect.setPosition(mouse.getPosition());
         }
+
+        ship.moveTo(rect.getPosition(), speed);
+
+        if(ship.isIntersect(rect)) {
+            speed=0;
+
+        }
+        else {
+            speed = 3;
+        }
+
+
 
         if(key.isDown("RIGHT")){
             if(ship.x + ship.w > width) {
